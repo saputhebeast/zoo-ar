@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/aframe@1.7.1/dist/aframe-v1.7.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js/aframe/build/aframe-ar.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <style> body { margin: 0; overflow: hidden; } </style>
+  </head>
+  <body>
+    <a-scene embedded arjs="sourceType: webcam; debugUIEnabled: false;">
+      <!-- Assets -->
+      <a-assets>
+        <a-asset-item id="lionModel"     src="./assets/Lion-low-poly.glb"></a-asset-item>
+        <a-asset-item id="elephantModel" src="./assets/Elephant-low-poly.glb"></a-asset-item>
+        <a-asset-item id="giraffeModel"  src="./assets/young_giraffe.glb"></a-asset-item>
+        <a-asset-item id="zebraModel"    src="./assets/Baby-Zebra.glb"></a-asset-item>
+
+        <!-- Sound Effects -->
+        <audio id="lionSound"    src="https://upload.wikimedia.org/wikipedia/commons/7/7d/Lion_raring-sound1TamilNadu178.ogg"></audio>
+        <audio id="elephantSound" src="https://upload.wikimedia.org/wikipedia/commons/4/40/Elephant_voice_-_trumpeting.ogg"></audio>
+        <audio id="giraffeSound"  src="https://upload.wikimedia.org/wikipedia/commons/a/a8/Giraffe_Hum.oga"></audio>
+        <audio id="zebraSound"    src="https://upload.wikimedia.org/wikipedia/commons/8/8c/Z-zebra.ogg"></audio>
+      </a-assets>
+
+      <!-- Lion on Hiro marker -->
+      <a-marker preset="hiro">
+        <a-entity gltf-model="#lionModel" scale="0.5 0.5 0.5"
+                  animation="property: rotation; to: 0 360 0; dur: 10000; loop: true"
+                  sound="src: #lionSound; on: click;"></a-entity>
+      </a-marker>
+
+      <!-- Elephant on Kanji marker -->
+      <a-marker preset="kanji">
+        <a-entity gltf-model="#elephantModel" scale="0.3 0.3 0.3"
+                  animation="property: position; to: 0 0.5 0; dir: alternate; dur: 2000; loop: true"
+                  sound="src: #elephantSound; on: click;"></a-entity>
+      </a-marker>
+
+      <!-- Zebra on Barcode marker (value=5) -->
+      <a-marker type="barcode" value="5">
+        <a-entity gltf-model="#zebraModel" scale="0.6 0.6 0.6"
+                  animation="property: rotation; to: 0 360 0; dur: 8000; loop: true"
+                  sound="src: #zebraSound; on: click;"></a-entity>
+      </a-marker>
+
+      <!-- Giraffe on Barcode marker (value=10) -->
+      <a-marker type="barcode" value="10">
+        <a-entity gltf-model="#giraffeModel" scale="0.7 0.7 0.7"
+                  animation="property: position; to: 0 0.5 0; dir: alternate; dur: 3000; loop: true"
+                  sound="src: #giraffeSound; on: click;"></a-entity>
+      </a-marker>
+
+      <a-entity camera></a-entity>
+    </a-scene>
+  </body>
+</html>
+
