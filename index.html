@@ -6,6 +6,41 @@
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.2/aframe/build/aframe-ar.js"></script>
     <style>
+      /* Simple styling for UI */
+      #ui-panel {
+        position: absolute;
+        top: 10px;
+        left: 10px;
+        z-index: 999;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        padding: 15px;
+        border-radius: 12px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        font-family: 'Segoe UI', sans-serif;
+        width: 220px;
+      }
+      .model-btn {
+        background: #00ffcc;
+        border: none;
+        padding: 6px 10px;
+        margin-right: 5px;
+        margin-bottom: 5px;
+        color: black;
+        font-weight: bold;
+        border-radius: 6px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .model-btn:hover {
+        background: #00ddaa;
+      }
+      label { font-size: 14px; }
+      .footer-note {
+        margin-top: 10px;
+        font-size: 12px;
+        opacity: 0.7;
+      }
     </style>
   </head>
   <body>
@@ -35,15 +70,13 @@
           gltf-model="assets/realistic_bloodhound_dog_3d_model.glb"
           scale="1 1 1"
           rotation="0 180 0"
-          position="0 0 0"
-          animation="property: rotation; to: 0 -180 0; loop: true; dur: 2000; easing: linear">
+          position="0 0 0">
         </a-entity>
-        <a-entity id="barkSound" sound="src: url(assets/dog-bark.mp3)"></a-entity>
+        <a-sound id="barkSound" src="url(assets/dog-bark.mp3)" autoplay="false"></a-sound>
       </a-marker>
       <a-entity camera></a-entity>
     </a-scene>
     <script>
-      // UI controls
       const dog = document.getElementById('dogModel');
       const sound = document.querySelector('#barkSound');
       document.getElementById('sizeSlider').addEventListener('input', (e) => {
