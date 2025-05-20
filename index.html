@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>AR Dog Demo</title>
+    <title>AR Dog with HIRO Marker</title>
     <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.2/aframe/build/aframe-ar.js"></script>
   </head>
@@ -12,8 +12,8 @@
         <audio id="bark" src="assets/dog-bark.mp3"></audio>
       </a-assets>
       
-      <!-- Use barcode marker with value 7 -->
-      <a-marker type="barcode" value="7" id="dogMarker">
+      <!-- Use the Hiro marker -->
+      <a-marker preset="hiro" id="dogMarker">
         <!-- 3D dog model with reverse spin animation -->
         <a-entity
           id="dog"
