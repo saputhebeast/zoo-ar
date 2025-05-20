@@ -1,20 +1,29 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.2/aframe/build/aframe-ar.min.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <style> body { margin: 0; overflow: hidden; } </style>
-    <base href="https://saputhebeast.github.io/zoo-ar/">
+    <title>AR Dog Demo</title>
+    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.2/aframe/build/aframe-ar.js"></script>
   </head>
-  <body>
-    <a-scene embedded arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;">
+  <body style="margin: 0; overflow: hidden;">
+    <a-scene embedded arjs>
       <a-assets>
-        <a-asset-item id="lionModel" src="assets/Lion-low-poly.glb"></a-asset-item>
+        <a-asset-item id="dogModel" src="assets/realistic_bloodhound_dog_3d_model.glb"></a-asset-item>
+        <audio id="bark" src="assets/dog-bark.mp3"></audio>
       </a-assets>
-
-      <a-marker preset="hiro">
-        <a-entity gltf-model="#lionModel" scale="0.5 0.5 0.5"></a-entity>
+      
+      <!-- Use barcode marker with value 7 -->
+      <a-marker type="barcode" value="7" id="dogMarker">
+        <!-- 3D dog model with reverse spin animation -->
+        <a-entity
+          id="dog"
+          gltf-model="#dogModel"
+          scale="1 1 1"
+          rotation="0 180 0"
+          animation="property: rotation; to: 0 -180 0; loop: true; dur: 2000; easing: linear">
+        </a-entity>
+        <!-- Bark sound that plays when marker is found -->
+        <a-entity sound="src: #bark; on: markerFound"></a-entity>
       </a-marker>
 
       <a-entity camera></a-entity>
