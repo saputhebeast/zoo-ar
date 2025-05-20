@@ -35,7 +35,12 @@
       font-size: 13px;
       pointer-events: auto;
     }
-    .model-btn:hover {
+    .model-btn:disabled {
+      background: #999;
+      color: #ccc;
+      cursor: not-allowed;
+    }
+    .model-btn:hover:enabled {
       background: #00ddaa;
     }
     label { font-size: 14px; }
@@ -113,7 +118,7 @@
     <h3>Dog Model Controls</h3>
     <div style="margin-bottom: 10px">
       <button class="model-btn" id="barkBtn">🐶 Bark!</button>
-      <button class="model-btn" id="colorBtn">🎨 Random Color</button>
+      <button class="model-btn" id="colorBtn" disabled>🎨 Random Color</button>
       <button class="model-btn" id="infoBtn">ℹ️ Info</button>
       <button class="model-btn" id="screenshotBtn">📸 Screenshot</button>
       <button class="model-btn" id="hideInfoBtn" style="display:none">Hide Info</button>
@@ -133,6 +138,19 @@
     const hideInfoBtn = document.getElementById('hideInfoBtn');
     const uiPanel = document.getElementById('ui-panel');
     const panelToggleBtn = document.getElementById('panel-toggle-btn');
+    const colorBtn = document.getElementById('colorBtn');
+
+    // Helper to set random color on all meshes of the GLTF model
+    function setRandomColorToGLTF(entity) {
+      if (!entity.getObject3D('mesh')) return;
+      var randomColor = '#'+(Math.random()*0xFFFFFF<<0).toString(16).padStart(6, "0");
+      entity.getObject3D('mesh').traverse(function(node) {
+        if (node.isMesh && node.material && 'color' in node.material) {
+          node.material.color.set(randomColor);
+          node.material.needsUpdate = true;
+        }
+      });
+    }
 
     document.getElementById('sizeSlider').addEventListener('input', (e) => {
       const s = e.target.value;
@@ -161,8 +179,8 @@
         audio.play();
       }
     });
-    document.getElementById('colorBtn').addEventListener('click', () => {
-      dog.setAttribute('material', 'color', '#'+(Math.random()*0xFFFFFF<<0).toString(16));
+    colorBtn.addEventListener('click', () => {
+      setRandomColorToGLTF(dog);
     });
 
     // Info Panel Toggle
@@ -182,9 +200,10 @@
       scene.components.screenshot.capture('perspective');
     });
 
-    // Loader Hide
+    // Loader Hide and enable color button after model loads
     dog.addEventListener('model-loaded', () => {
       document.getElementById('loader').style.display = 'none';
+      colorBtn.disabled = false;
     });
 
     // Control Panel Toggle
