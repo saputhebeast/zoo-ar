@@ -1,107 +1,93 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>AR Dog Control Panel</title>
-    <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.2/aframe/build/aframe-ar.js"></script>
-    <style>
-      /* Simple styling for UI */
-      #ui-panel {
-        position: absolute;
-        top: 10px;
-        left: 10px;
-        z-index: 999;
-        background: rgba(0, 0, 0, 0.5);
-        color: white;
-        padding: 15px;
-        border-radius: 12px;
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        font-family: 'Segoe UI', sans-serif;
-        width: 220px;
-      }
-      .model-btn {
-        background: #00ffcc;
-        border: none;
-        padding: 6px 10px;
-        margin-right: 5px;
-        margin-bottom: 5px;
-        color: black;
-        font-weight: bold;
-        border-radius: 6px;
-        cursor: pointer;
-        font-size: 13px;
-      }
-      .model-btn:hover {
-        background: #00ddaa;
-      }
-      label { font-size: 14px; }
-      .footer-note {
-        margin-top: 10px;
-        font-size: 12px;
-        opacity: 0.7;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="ui-panel">
-      <h3>Dog Model Controls</h3>
-      <div style="margin-bottom: 10px">
-        <button class="model-btn" id="barkBtn">🐶 Bark!</button>
-      </div>
-      <div>
-        <button id="rotateLeft" class="model-btn">⟲ Rotate Left</button>
-        <button id="rotateRight" class="model-btn">⟳ Rotate Right</button>
-      </div>
-      <label for="sizeSlider">Adjust Size</label>
-      <input
-        type="range"
-        id="sizeSlider"
-        min="0.1"
-        max="3"
-        step="0.1"
-        value="1" />
-      <div class="footer-note">Point at the Hiro marker</div>
+<head>
+  <meta charset="utf-8" />
+  <title>AR Dog Control Panel</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AR-js-org/AR.js@3.4.2/aframe/build/aframe-ar.js"></script>
+  <style>
+    /* ...UI styles as above... */
+    /* Paste your existing style here for #ui-panel etc. */
+    #infoPanel { display:none;background:#222;padding:10px;border-radius:8px;margin-top:10px; }
+    #loader { position:fixed;top:0;left:0;right:0;bottom:0;display:flex;align-items:center;justify-content:center;background:#000a;color:white;font-size:22px;z-index:99999;}
+  </style>
+</head>
+<body>
+  <div id="loader">Loading Dog Model...</div>
+  <div id="ui-panel">
+    <h3>Dog Model Controls</h3>
+    <div style="margin-bottom: 10px">
+      <button class="model-btn" id="barkBtn">🐶 Bark!</button>
+      <button class="model-btn" id="colorBtn">🎨 Random Color</button>
+      <button class="model-btn" id="infoBtn">ℹ️ Info</button>
+      <button class="model-btn" id="screenshotBtn">📸 Screenshot</button>
     </div>
-    <a-scene embedded arjs>
-      <a-marker preset="hiro">
-        <a-entity
-          id="dogModel"
-          gltf-model="assets/realistic_bloodhound_dog_3d_model.glb"
-          scale="1 1 1"
-          rotation="0 180 0"
-          position="0 0 0">
-        </a-entity>
+    <div>
+      <button id="rotateLeft" class="model-btn">⟲ Rotate Left</button>
+      <button id="rotateRight" class="model-btn">⟳ Rotate Right</button>
+    </div>
+    <label for="sizeSlider">Adjust Size</label>
+    <input type="range" id="sizeSlider" min="0.1" max="3" step="0.1" value="1" />
+    <div id="infoPanel"></div>
+    <div class="footer-note">Point at the Hiro marker</div>
+  </div>
+  <a-scene embedded arjs>
+    <a-marker preset="hiro">
+      <a-entity
+        id="dogModel"
+        gltf-model="assets/realistic_bloodhound_dog_3d_model.glb"
+        scale="1 1 1"
+        rotation="0 180 0"
+        position="0 0 0">
         <a-sound id="barkSound" src="url(assets/dog-bark.mp3)" autoplay="false"></a-sound>
-      </a-marker>
-      <a-entity camera></a-entity>
-    </a-scene>
-    <script>
-      const dog = document.getElementById('dogModel');
-      const sound = document.querySelector('#barkSound');
-      document.getElementById('sizeSlider').addEventListener('input', (e) => {
-        const s = e.target.value;
-        dog.setAttribute('scale', `${s} ${s} ${s}`);
-      });
-      document.getElementById('rotateLeft').addEventListener('click', () => {
-        let rot = dog.getAttribute('rotation');
-        dog.setAttribute('rotation', {
-          x: rot.x,
-          y: rot.y - 30,
-          z: rot.z
-        });
-      });
-      document.getElementById('rotateRight').addEventListener('click', () => {
-        let rot = dog.getAttribute('rotation');
-        dog.setAttribute('rotation', {
-          x: rot.x,
-          y: rot.y + 30,
-          z: rot.z
-        });
-      });
-      document.getElementById('barkBtn').addEventListener('click', () => {
-        sound.components.sound.playSound();
-      });
-    </script>
-  </body>
+      </a-entity>
+    </a-marker>
+    <a-entity camera></a-entity>
+  </a-scene>
+  <script>
+    const dog = document.getElementById('dogModel');
+    document.getElementById('sizeSlider').addEventListener('input', (e) => {
+      const s = e.target.value;
+      dog.setAttribute('scale', `${s} ${s} ${s}`);
+    });
+    document.getElementById('rotateLeft').addEventListener('click', () => {
+      let rot = dog.getAttribute('rotation');
+      dog.setAttribute('rotation', { x: rot.x, y: rot.y - 30, z: rot.z });
+    });
+    document.getElementById('rotateRight').addEventListener('click', () => {
+      let rot = dog.getAttribute('rotation');
+      dog.setAttribute('rotation', { x: rot.x, y: rot.y + 30, z: rot.z });
+    });
+    document.getElementById('barkBtn').addEventListener('click', () => {
+      const bark = dog.querySelector('#barkSound');
+      if (bark && bark.components.sound) {
+        bark.components.sound.playSound();
+      } else {
+        let audio = document.getElementById('barkAudio');
+        if (!audio) {
+          audio = document.createElement('audio');
+          audio.src = 'assets/dog-bark.mp3';
+          audio.id = 'barkAudio';
+          document.body.appendChild(audio);
+        }
+        audio.play();
+      }
+    });
+    document.getElementById('colorBtn').addEventListener('click', () => {
+      dog.setAttribute('material', 'color', '#'+(Math.random()*0xFFFFFF<<0).toString(16));
+    });
+    document.getElementById('infoBtn').addEventListener('click', () => {
+      const panel = document.getElementById('infoPanel');
+      panel.innerHTML = "<strong>Bloodhound:</strong> Famous for their sense of smell. Used in police work and rescue!";
+      panel.style.display = 'block';
+    });
+    document.getElementById('screenshotBtn').addEventListener('click', () => {
+      var scene = document.querySelector('a-scene');
+      scene.components.screenshot.capture('perspective');
+    });
+    dog.addEventListener('model-loaded', () => {
+      document.getElementById('loader').style.display = 'none';
+    });
+  </script>
+</body>
 </html>
